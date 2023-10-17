@@ -4,23 +4,28 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 
 public class DateLapse {
-	private LocalDate from;
-	private LocalDate to;
+	private LocalDate desde;
+	private LocalDate hasta;
 	
-	public DateLapse(String from, String to) {
-		this.from = LocalDate.from(LocalDate.parse(from));
-		this.to = LocalDate.from(LocalDate.parse(to));
+	public DateLapse(String desde, String hasta) {
+		this.desde = LocalDate.from(LocalDate.parse(desde));
+		this.hasta = LocalDate.from(LocalDate.parse(hasta));
 	}
-	public LocalDate getFrom() {
-		return from;
+	public LocalDate getDesde() {
+		return desde;
 	}
-	public LocalDate getTo() {
-		return to;
+	public LocalDate getHasta() {
+		return hasta;
 	}
-	public int sizeInDays() {
-		return (int)ChronoUnit.DAYS.between(getFrom(), getTo());
+	public int cantidadDeDias() {
+		return (int)ChronoUnit.DAYS.between(getDesde(), getHasta());
 	}
-	public boolean includesDate(LocalDate other) {
-		return other.isAfter(getFrom()) && other.isBefore(getTo());
+	public boolean estaLibre(String desde, String hasta) {
+		LocalDate fechaDesde = LocalDate.from(LocalDate.parse(desde));
+		LocalDate fechaHasta = LocalDate.from(LocalDate.parse(hasta));
+		return ( fechaDesde.isEqual(getDesde()) || fechaDesde.isAfter(getDesde()) ) && ( fechaHasta.isBefore(getHasta()) || fechaHasta.isEqual(getHasta()) );
+	}
+	public boolean isBefore(LocalDate fechaAlquilada, LocalDate desde) {
+		return fechaAlquilada.isBefore(desde);
 	}
 }

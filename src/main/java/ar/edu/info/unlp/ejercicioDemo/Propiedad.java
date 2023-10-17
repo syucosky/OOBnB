@@ -16,4 +16,23 @@ public class Propiedad {
 		this.propietario = propietario;
 		this.fechaOcupada = null;
 	}
+	
+	public void setFechaAlquiler(String desde, String hasta) {
+		this.fechaOcupada = new DateLapse(desde, hasta);
+	}
+	public String getNombre() {
+		return this.nombre;
+	}
+	public double getPrecioPorNoche() {
+		return this.precioPorNoche;
+	}
+	public DateLapse getFechaOcupada() {
+		return this.fechaOcupada;
+	}
+	public Usuario getPropietario() {
+		return this.propietario;
+	}
+	public boolean estaDisponible(String desde, String hasta) {
+		return this.fechaOcupada.estaLibre(desde,hasta);
+	}
 }

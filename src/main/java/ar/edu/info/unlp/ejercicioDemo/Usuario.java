@@ -36,8 +36,13 @@ public class Usuario {
 		this.reservaActual = propiedad;
 		this.setReservaEnHistorial(propiedad);
 	}
-	
+	public List<Propiedad> getHistorialDeReservas(){
+		return this.historialDeReservas;
+	}
 	public void setReservaEnHistorial(Propiedad propiedad) {
 		this.historialDeReservas.add(propiedad);
+	}
+	public void terminarReservaActual() {
+		this.reservaActual = null;
 	}
 }
