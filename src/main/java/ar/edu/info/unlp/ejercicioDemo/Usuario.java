@@ -28,6 +28,9 @@ public class Usuario {
 	public void setPropiedadEnAlquiler(Propiedad propiedad) {
 		this.propiedadesEnAlquiler.add(propiedad);
 	}
+	public List<Propiedad> getPropiedadesEnAlquiler(){
+		return this.propiedadesEnAlquiler;
+	}
 	
 	
 	
