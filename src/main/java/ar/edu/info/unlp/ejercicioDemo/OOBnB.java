@@ -1,6 +1,7 @@
 package ar.edu.info.unlp.ejercicioDemo;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -8,20 +9,20 @@ public class OOBnB {
 	private List<Usuario> usuarios;
 	private List<Propiedad> propiedades;
 		
+	public OOBnB() {
+		usuarios = new ArrayList<Usuario>();
+		propiedades = new ArrayList<Propiedad>();
+	}
 	
 	//Métodos de PROPIEDADES
 	
 	// DADA UNA PROPIEDAD LA CUAL CUENTA CON RESERVA Y UN USUARIO(INQUILINO) SI LA FECHA DE HOY ES POSTERIOR SE ELIMINA LA RESERVA
 	public void eliminarReserva(Propiedad propiedad, Usuario usuario) {
-		Propiedad propiedadDeLista = getPropiedadDeLista(propiedad);
-		Usuario usuarioDeLista = getUsuarioDeLista(usuario);
 		
-		LocalDate fechaAlquilada = propiedadDeLista.getFechaOcupada().getDesde();
-		
-		if(propiedadDeLista.getFechaOcupada().isBefore(fechaAlquilada,LocalDate.now())) {
+		if(getPropiedadDeLista(propiedad).getFechaOcupada().getDesde().isBefore(LocalDate.now())) {
 			
-			propiedadDeLista.setFechaAlquiler(null, null);
-			usuarioDeLista.terminarReservaActual();
+			getPropiedadDeLista(propiedad).setFechaAlquiler("2000-01-01", "2000-01-01");
+			getUsuarioDeLista(usuario).terminarReservaActual();
 			
 		}		
 	}
@@ -40,15 +41,15 @@ public class OOBnB {
 	}
 	// DADA UNA PROPIEDAD Y UNA FECHA SE RESERVA LA MISMA, Y AL USUARIO SE LE ESTABLECE LA RESERVA 
 	public Propiedad reservarPropiedad(Propiedad propiedad,String desde, String hasta, Usuario usuario) {
-		Propiedad propiedadDeLista = getPropiedadDeLista(propiedad);
-		Usuario usuarioDeLista = getUsuarioDeLista(usuario);
+		getPropiedadDeLista(propiedad);
+		getUsuarioDeLista(usuario);
 		
 		
-		if(propiedadDeLista != null & usuarioDeLista != null & propiedadDeLista.estaDisponible(desde, hasta)) {
+		if(getPropiedadDeLista(propiedad) != null & getUsuarioDeLista(usuario) != null & getPropiedadDeLista(propiedad).estaDisponible(desde, hasta)) {
 			
-			propiedadDeLista.setFechaAlquiler(desde, hasta);
-			usuarioDeLista.setReserva(propiedad);
-			return propiedadDeLista;
+			getPropiedadDeLista(propiedad).setFechaAlquiler(desde, hasta);
+			getUsuarioDeLista(usuario).setReserva(propiedad);
+			return getPropiedadDeLista(propiedad);
 			
 		}else {
 			return null;
@@ -75,13 +76,10 @@ public class OOBnB {
 	}
 	// AGREAGA LA PROPIEDAD A LA LISTA DE PROPIEDADES Y AL 
 	// PROPIETARIO LE AGREGA LA PROPIEDAD EN SU LISTA DE PROPIEDADES ALQUILADAS
-	public Propiedad registrarPropiedadParaAlquilar(String nombre, String descripcion, double precioPorNoche, String direccion, Usuario propietario) {
-		Propiedad nuevaPropiedad = new Propiedad(nombre, descripcion, precioPorNoche, direccion, propietario);
-		Usuario usuarioDeLista = getUsuarioDeLista(propietario);
-		
-		if(addPropiedad(nuevaPropiedad)) {
-			usuarioDeLista.setPropiedadEnAlquiler(nuevaPropiedad);
-			return nuevaPropiedad;
+	public Propiedad registrarPropiedadParaAlquilar(Propiedad propiedad) {	
+		if(addPropiedad(propiedad)) {
+			propiedad.getPropietario().setPropiedadEnAlquiler(propiedad);
+			return propiedad;
 		}else {
 			return null;
 		}
@@ -105,27 +103,25 @@ public class OOBnB {
 
 	// DADO UN USUARIO Y DOS FECHAS RETORNA LA GANCIA TOTAL ENTRE ESAS FECHAS
 	public double ingresoTotalPorAlquileres(Usuario usuario, String desde, String hasta) {
-		Usuario usuarioDeLista = getUsuarioDeLista(usuario);
-		double montoTotal = usuarioDeLista.getPropiedadesEnAlquiler().stream()
+		double montoTotal = getUsuarioDeLista(usuario).getPropiedadesEnAlquiler().stream()
 										.mapToDouble(prop -> calcularPrecioReserva(prop, desde, hasta))
 										.sum();
 		return montoTotal;																	 
 	}
 	
 	// RETORNA EL HISTORIAL DE PROPIEDADES ALQUILADAS POR UN USUARIO 
-	public List<Propiedad> todasLasReservas(Usuario usuario){                     // VER
-																					// VER	
-		return (List<Propiedad>) this.usuarios.stream()								// VER
+	public List<Propiedad> todasLasReservas(Usuario usuario){                           // VER
+																					    // VER	
+		return (List<Propiedad>) this.usuarios.stream()								    // VER
 							.filter(usu -> usu.equals(usuario))							// VER
-							.map(usu -> usu.getHistorialDeReservas());			// VER
+							.map(usu -> usu.getHistorialDeReservas());			        // VER
 	}																					// VER
 	
 	// REGISTRA UN NUEVO USUARIO A LA LISTA DE USUARIOS
-	public Usuario registrarUsuario(String nombre, String direccion, int dni) {
-		Usuario nuevoUsuario =  new Usuario(nombre, direccion, dni);
+	public Usuario registrarUsuario(Usuario usuario) {
 		
-		if(addUsuario(nuevoUsuario)) {
-			return nuevoUsuario;
+		if(addUsuario(usuario)) {
+			return usuario;
 		}else {
 			return null;
 		}

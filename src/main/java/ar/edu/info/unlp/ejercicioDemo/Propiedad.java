@@ -14,11 +14,12 @@ public class Propiedad {
 		this.precioPorNoche = precioPorNoche;
 		this.direccion = direccion;
 		this.propietario = propietario;
-		this.fechaOcupada = null;
+		fechaOcupada = new DateLapse();
 	}
 	
 	public void setFechaAlquiler(String desde, String hasta) {
-		this.fechaOcupada = new DateLapse(desde, hasta);
+		this.fechaOcupada.setDesde(desde);
+		this.fechaOcupada.setHasta(hasta);
 	}
 	public String getNombre() {
 		return this.nombre;
@@ -33,6 +34,10 @@ public class Propiedad {
 		return this.propietario;
 	}
 	public boolean estaDisponible(String desde, String hasta) {
-		return this.fechaOcupada.estaLibre(desde,hasta);
+		if (this.fechaOcupada.getDesde() != null & this.fechaOcupada.getHasta() != null) {
+			return this.fechaOcupada.estaLibre(desde,hasta);
+		}else {
+			return true;
+		}
 	}
 }
