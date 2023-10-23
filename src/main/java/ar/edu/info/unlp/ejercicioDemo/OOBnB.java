@@ -1,6 +1,7 @@
 package ar.edu.info.unlp.ejercicioDemo;
 
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,14 +18,17 @@ public class OOBnB {
 	//Métodos de PROPIEDADES
 	
 	// DADA UNA PROPIEDAD LA CUAL CUENTA CON RESERVA Y UN USUARIO(INQUILINO) SI LA FECHA DE HOY ES POSTERIOR SE ELIMINA LA RESERVA
-	public void eliminarReserva(Propiedad propiedad, Usuario usuario) {
-		
-		if(getPropiedadDeLista(propiedad).getFechaOcupada().getDesde().isBefore(LocalDate.now())) {
-			
+	public double eliminarReserva(Propiedad propiedad, Usuario usuario) {
+		double precioReserva = calcularPrecioReserva(propiedad, propiedad.getFechaOcupada().getDesde().toString(), propiedad.getFechaOcupada().getHasta().toString());
+		double dias = ChronoUnit.DAYS.between(getPropiedadDeLista(propiedad).getFechaOcupada().getDesde(),LocalDate.now());
+		if(getPropiedadDeLista(propiedad).getFechaOcupada().getDesde().isAfter(LocalDate.now())) {	
 			getPropiedadDeLista(propiedad).setFechaAlquiler("2000-01-01", "2000-01-01");
 			getUsuarioDeLista(usuario).terminarReservaActual();
-			
-		}		
+			double precioTotal = precioReserva * getPropiedadDeLista(propiedad).getCancelacion().politicaDeCancelacion(Math.abs(dias));
+			return precioTotal;
+		}else {
+			return 0;
+		}
 	}
 	// DADA UNA PROPIEDAD Y UNA FECHA SE RETORNA EL PRECIO FINAL DE ESA POSIBLE RESERVA
 	public double calcularPrecioReserva(Propiedad propiedad, String desde, String hasta) {

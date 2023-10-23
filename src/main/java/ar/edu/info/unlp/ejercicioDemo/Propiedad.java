@@ -7,16 +7,21 @@ public class Propiedad {
 	private String direccion;
 	private Usuario propietario;
 	private DateLapse fechaOcupada;
+	private Cancelacion politicaDeCancelacion;
 	
-	public Propiedad(String nombre, String descripcion, double precioPorNoche, String direccion, Usuario propietario) {
+	public Propiedad(String nombre, String descripcion, double precioPorNoche, String direccion, Usuario propietario, Cancelacion politicaDeCancelacion) {
 		this.nombre = nombre;
 		this.descripcion = descripcion;
 		this.precioPorNoche = precioPorNoche;
 		this.direccion = direccion;
 		this.propietario = propietario;
 		fechaOcupada = new DateLapse();
+		this.politicaDeCancelacion = politicaDeCancelacion;
 	}
 	
+	public Cancelacion getCancelacion() {
+		return this.politicaDeCancelacion;
+	}
 	public void setFechaAlquiler(String desde, String hasta) {
 		this.fechaOcupada.setDesde(desde);
 		this.fechaOcupada.setHasta(hasta);
